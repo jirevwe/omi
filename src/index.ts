@@ -14,18 +14,22 @@ export default class Omi<T> extends Stream {
   private keys = [];
   private items: T[];
   private index: number;
+  private mode: boolean;
   private paused: boolean = false;
   private readable: boolean = true;
 
-  constructor(_items: T[]) {
+  /**
+   *  Creates a new array stream
+   *
+   * @param _items The array items
+   * @param objectMode Object mode or string mode
+   */
+  constructor(_items: T[], objectMode: boolean = true) {
     super();
     this.index = 0;
     this.items = _items;
+    this.mode = objectMode;
     this.keys = Object.keys(this.items);
-  }
-
-  stream() {
-    return this;
   }
 
   bind() {
@@ -82,7 +86,12 @@ export default class Omi<T> extends Stream {
           // emit the current item
           const currentKey = self.keys[self.index++];
           const currentItem = self.items[currentKey];
-          emit.call(self, OmiEvent.DATA, currentItem, currentKey);
+          emit.call(
+            self,
+            OmiEvent.DATA,
+            self.mode ? currentItem : JSON.stringify(currentItem),
+            currentKey
+          );
 
           // move to the next item
           if (!self.paused) nextTick(run);

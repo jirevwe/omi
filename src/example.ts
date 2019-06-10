@@ -1,9 +1,9 @@
 import Omi, { OmiEvent } from '.';
 
-const omi = new Omi([]);
+const omi = new Omi<number>([]);
 
 omi.on(OmiEvent.DATA, (data, key) => {
-  console.log(key, data);
+  console.log(key, JSON.parse(data));
 });
 
 omi.on(OmiEvent.END, () => {
