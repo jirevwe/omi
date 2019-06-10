@@ -4,7 +4,7 @@ Lmao. Ignore the name for a second.
 
 This lib was inspired by [@shinout's](https://github.com/shinout) [ArrayStream](https://github.com/shinout/ArrayStream).
 
-This a tiny tool that turns a array into a stream to which items can be added to. I wrote this because a few stream libs I found didn't allow me add items after items to it after I'd already created the stream. Plus I wanted to learn a little about streams in NodeJs.
+This a tiny tool that turns a array into a stream to which items can be added to. I wrote this because a few stream libs I found didn't allow me add items to it after I'd already created the stream. Plus I wanted to learn a little about streams in NodeJs.
 
 ## Usage
 
