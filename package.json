@@ -1,0 +1,30 @@
+{
+  "name": "@random-guys/omi",
+  "version": "0.0.0",
+  "description": "An array as a stream",
+  "keywords": [
+    "list",
+    "stream",
+    "array",
+    "object",
+    "ReadableStream"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "node dist/example.js",
+    "build": "tsc -p ./tsconfig.json",
+    "watch": "tsc -w -p ./tsconfig.json",
+    "test": "jest --detectOpenHandles --forceExit"
+  },
+  "author": "Raymond Tukpe <rtukpe@gmail.com>",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^23.3.13",
+    "@types/node": "^10.12.21",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.4"
+  }
+}

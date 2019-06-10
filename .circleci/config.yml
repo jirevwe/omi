@@ -1,0 +1,79 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependency-cache-{{checksum "package.json"}}
+            - dependency-cache-
+      - run:
+          name: Install dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{checksum "package.json"}}
+          paths:
+            - node_modules
+      - run:
+          name: Build typescript
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - dist
+  test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependency-cache-{{checksum "package.json"}}
+            - dependency-cache-
+      - run:
+          name: Install dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{checksum "package.json"}}
+          paths:
+            - node_modules
+      - run:
+          name: Run tests
+          command: yarn test
+  deploy:
+    working_directory: ~/app
+    environment:
+      NPM_USER: $CIRCLE_NPM_USER
+      NPM_PASS: $CIRCLE_NPM_PASS
+      NPM_EMAIL: $CIRCLE_NPM_EMAIL
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy to NPM Registry
+          command: |
+            yarn build
+            npm i npm-cli-login
+            NPM_USER=$CIRCLE_NPM_USER NPM_PASS=$CIRCLE_NPM_PASS NPM_EMAIL=$CIRCLE_NPM_EMAIL node ./node_modules/npm-cli-login/bin/npm-cli-login.js
+            npm publish --access public
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          context: global
+          requires:
+            - build
+      - deploy:
+          context: global
+          requires:
+            - test
