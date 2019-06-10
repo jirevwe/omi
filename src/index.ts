@@ -53,7 +53,7 @@ export default class Omi<T> extends Stream {
 
   add(_items: T[]) {
     //add the new items to the stream
-    _items.map(item => this.items.push(item));
+    this.items = this.items.concat(_items);
 
     // remap object keys
     this.keys = Object.keys(this.items);
