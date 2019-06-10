@@ -1,53 +1,48 @@
-# jwt256
+# Omi 🌊
 
-Implementation of JWT using AES-256
+Lmao. Ignore the name for a second.
 
-![jwt](http://jwt.io/img/logo-asset.svg)
+This lib was inspired by [@shinout's](https://github.com/shinout) [ArrayStream](https://github.com/shinout/ArrayStream).
 
-## To Use
-
-`yarn add @random-guys/jwt256` or `npm install @random-guys/jwt256`
-
----
-
-Ensure `JWT_SECRET` and `REDIS_KEY` environment variables are set, and that `REDIS_KEY` is a 32 digit string.
+This a tiny tool that turns a array into a stream to which items can be added to. I wrote this because a few stream libs I found didn't allow me add items after items to it after I'd already created the stream. Plus I wanted to learn a little about streams in NodeJs.
 
 ## Usage
 
 ```ts
-import { GetUserAuth, SetUserAuth } from "@random-guys/jwt256";
-import redisService from "@app/common/services/redis";
+import Omi, { OmiEvent } from '.';
 
-//creates an encrpted JWT token and saves it in Redis using the user's id.
-@httpPost("/signup")
-async signup(@request() req: Request, @response() res: Response, @requestBody(), body: SignupDTO) {
-  try {
-    let user = create(body);
-    const token = await SetUserAuth(redisService, user.id);
-    this.handleSuccess(req, res, { token, user });
-  } catch (err) {
-    this.handleError(req, res, err);
-  }
-}
+const omi = new Omi([]);
 
-/**
- * reads the Authorization header and validates the content with that stored in Redis
- */
-@httpPost("/buy", GetUserAuth(redisService))
-async buyBook(
-  @request() req: Request,
-  @response() res: Response,
-  @requestBody() body: BuyBookDTO
-) {
-  try {
-    const sale = await this.bookRepo.buyBook({ id: req.user } , body);
-    this.handleSuccess(req, res, user);
-  } catch (err) {
-    console.log(err);
-    this.handleError(req, res, err);
-  }
-}
+omi.on(OmiEvent.DATA, (data, key) => {
+  console.log(key, data);
+});
 
+omi.on(OmiEvent.END, () => {
+  console.log('Stream closed');
+});
+
+omi.on(OmiEvent.ERROR, error => {
+  console.log(error);
+});
+
+setTimeout(() => {
+  omi.add([...Array.from({ length: 100 }).keys()].map((i: number) => i ** i));
+}, 1000);
+
+setTimeout(() => {
+  omi.add([...Array.from({ length: 100 }).keys()].map((i: number) => 2 ** i));
+}, 3000);
 ```
 
-The user id is in the `req.user` field.
+## Contribution
+
+PRs are welcome 😬
+
+## TODO
+
+- Write tests
+- Comepletion handler callback to end stream context consuming the stream
+
+# NB
+
+We're hiring, DM me on twitter [@rtukpe](https://twitter.com/rtukpe) 😎
