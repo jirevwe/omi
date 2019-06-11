@@ -48,7 +48,11 @@ export default class Omi<T> extends Stream {
     this.paused = true;
   }
 
-  // force close the stream
+  ended() {
+    return this.paused && !this.readable;
+  }
+
+  // close the stream we're done here
   end() {
     this.paused = true;
     this.readable = false;
@@ -62,7 +66,7 @@ export default class Omi<T> extends Stream {
     // remap object keys
     this.keys = Object.keys(this.items);
 
-    // continue stream
+    // continue streaming data
     this.resume();
   }
 
@@ -77,12 +81,7 @@ export default class Omi<T> extends Stream {
       try {
         if (!self.readable) return;
 
-        if (self.index >= self.items.length) {
-          // check if current iteration is done
-          // self.pause();
-          // self.end();
-          emit.call(self, OmiEvent.DONE);
-        } else {
+        if (self.index < self.items.length) {
           // emit the current item
           const currentKey = self.keys[self.index++];
           const currentItem = self.items[currentKey];
