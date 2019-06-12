@@ -1,4 +1,4 @@
-import Omi, { OmiEvent } from '.';
+import Omi, { OmiEvent } from '..';
 
 const omi = new Omi<number>([]);
 
