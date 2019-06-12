@@ -85,6 +85,12 @@ export default class Omi<T> extends Stream {
           // emit the current item
           const currentKey = self.keys[self.index++];
           const currentItem = self.items[currentKey];
+
+          // LMAO, I've changed this code many times.
+          // If we push null to the stream, we're telling it we're done
+          // :p xD :D
+          if (currentItem === null) self.end();
+
           emit.call(
             self,
             OmiEvent.DATA,

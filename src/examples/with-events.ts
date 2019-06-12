@@ -3,7 +3,7 @@ import Omi, { OmiEvent } from '..';
 const omi = new Omi<number>([]);
 
 omi.on(OmiEvent.DATA, (data, key) => {
-  console.log(key, JSON.parse(data));
+  console.log(key, data);
 });
 
 omi.on(OmiEvent.END, () => {
