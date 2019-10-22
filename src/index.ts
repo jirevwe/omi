@@ -59,9 +59,20 @@ export default class Omi<T> extends Stream {
     super.emit(OmiEvent.END);
   }
 
-  add(_items: T[]) {
+  addMany(_items: T[]) {
     //add the new items to the stream
-    this.items = this.items.concat(_items);
+    this.items.push(..._items);
+
+    // remap object keys
+    this.keys = Object.keys(this.items);
+
+    // continue streaming data
+    this.resume();
+  }
+
+  addOne(_item: T) {
+    //add the new items to the stream
+    this.items.push(_item);
 
     // remap object keys
     this.keys = Object.keys(this.items);
