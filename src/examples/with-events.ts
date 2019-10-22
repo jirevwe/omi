@@ -14,14 +14,10 @@ omi.on(OmiEvent.ERROR, error => {
   console.log(error);
 });
 
-setTimeout(() => {
-  omi.addMany(
-    [...Array.from({ length: 100 }).keys()].map((i: number) => i ** i)
-  );
-}, 1000);
-
-setTimeout(() => {
-  omi.addMany(
-    [...Array.from({ length: 100 }).keys()].map((i: number) => 2 ** i)
-  );
-}, 3000);
+[...Array.from({ length: 10 }).keys()].forEach(() => {
+  setTimeout(() => {
+    omi.addMany(
+      [...Array.from({ length: 10000 }).keys()].map((i: number) => i ** 2)
+    );
+  }, 100);
+});
