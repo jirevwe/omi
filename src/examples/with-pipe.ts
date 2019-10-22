@@ -21,11 +21,11 @@ const writeStream = createWriteStream(join(__dirname, '../../test.txt'));
 omi.pipe(uppercaseTransformer).pipe(writeStream);
 
 // add data to the stream
-omi.add(
+omi.addMany(
   [...Array.from({ length: 100 }).keys()].map(() => faker.lorem.lines(1))
 );
 
 // add data to the stream
-omi.add(
+omi.addMany(
   [...Array.from({ length: 100 }).keys()].map(() => faker.internet.email())
 );

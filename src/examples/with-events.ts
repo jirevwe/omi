@@ -15,9 +15,13 @@ omi.on(OmiEvent.ERROR, error => {
 });
 
 setTimeout(() => {
-  omi.add([...Array.from({ length: 100 }).keys()].map((i: number) => i ** i));
+  omi.addMany(
+    [...Array.from({ length: 100 }).keys()].map((i: number) => i ** i)
+  );
 }, 1000);
 
 setTimeout(() => {
-  omi.add([...Array.from({ length: 100 }).keys()].map((i: number) => 2 ** i));
+  omi.addMany(
+    [...Array.from({ length: 100 }).keys()].map((i: number) => 2 ** i)
+  );
 }, 3000);
