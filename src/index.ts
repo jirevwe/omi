@@ -82,13 +82,12 @@ export default class Omi<T> extends Stream {
   }
 
   // override the original emit function
-  // @ts-ignore
   emit() {
     // hook into the super's emit
     const emit = super.emit;
     const self = this;
 
-    (function run() {
+    return (function run() {
       try {
         if (!self.readable) return;
 
@@ -100,7 +99,10 @@ export default class Omi<T> extends Stream {
           // LMAO, I've changed this code many times.
           // If we push null to the stream, we're telling it we're done
           // :p xD :D
-          if (currentItem === null) self.end();
+          if (currentItem === null) {
+            self.end();
+            return true;
+          }
 
           emit.call(
             self,
@@ -114,6 +116,7 @@ export default class Omi<T> extends Stream {
         }
       } catch (error) {
         emit.call(self, OmiEvent.ERROR, error);
+        return false;
       }
     })();
   }
